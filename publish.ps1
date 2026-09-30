@@ -1,6 +1,7 @@
 ﻿# 昼の速報を書き出して公開する。12時・17時の取り込みのあとに1回叩く。
 # 書き出しは禁止項目があると何も書かずに止まる。そのときは push もしない。
-param([string]$At = (Get-Date -Format "HH:mm"), [switch]$Notify)
+# -At は必須。省略して現在時刻を使うと 1207 のような回ができ、「12時」ボタンと重複するため
+param([Parameter(Mandatory=$true)][string]$At, [switch]$Notify)
 $ErrorActionPreference = "Stop"
 $site = $PSScriptRoot
 $app = "C:\Users\Owner\juggler-analyzer-paste"

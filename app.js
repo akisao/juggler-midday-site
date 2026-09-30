@@ -59,10 +59,24 @@ function render() {
     doc.missing.map((n) => `※ ${n}は今回取得できませんでした`).join("　");
 }
 
+// 連打で古い応答が後から届いても、新しい選択を上書きしないための連番
+let loadSeq = 0;
+
 async function load(file) {
+  const seq = ++loadSeq;
+  const entry = state.entries.find((e) => e.file === file);
+  let doc;
+  try {
+    doc = await getJson(`data/${file}`);
+  } catch {
+    // 失敗したら前の表示（state）はそのまま残す
+    if (seq === loadSeq) document.getElementById("when").textContent = "読み込めませんでした";
+    return;
+  }
+  if (seq !== loadSeq) return;
   state.file = file;
-  state.date = state.entries.find((e) => e.file === file).date;
-  state.doc = await getJson(`data/${file}`);
+  state.date = entry.date;
+  state.doc = doc;
   render();
 }
 
