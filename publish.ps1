@@ -15,5 +15,7 @@ git -C $site add -A
 $changed = git -C $site status --porcelain
 if (-not $changed) { Write-Host "変更なし"; exit 0 }
 git -C $site commit -q -m ("速報 " + (Get-Date -Format "yyyy-MM-dd HH:mm"))
+if ($LASTEXITCODE -ne 0) { Write-Host "コミットに失敗しました"; exit 1 }
 git -C $site push
+if ($LASTEXITCODE -ne 0) { Write-Host "push に失敗しました（公開されていません）"; exit 1 }
 Write-Host "公開しました。数分で反映されます"
