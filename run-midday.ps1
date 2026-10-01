@@ -8,5 +8,5 @@ $app = "C:\Users\Owner\juggler-analyzer-paste"
 
 & "$app\.venv\Scripts\python.exe" -m juggler.cli midday-fetch --at $At --notify
 $until = Get-Date -Format "HH:mm"
-& "$site\publish.ps1" -At $until -Notify
+& "$site\publish.ps1" -At $until -Slot $At -Notify
 exit $LASTEXITCODE
