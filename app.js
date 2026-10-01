@@ -66,6 +66,12 @@ function render() {
   const sorted = doc.rows
     .map((r) => ({ r, v: pick(r, metric) }))
     .sort((a, b) => (b.v ?? -Infinity) - (a.v ?? -Infinity));
+  // もう一方の数字で並べたときの順位。合算で1位の組が REG では何位か、を一緒に見られるように
+  const otherRank = new Map(doc.rows
+    .map((r) => ({ r, v: pick(r, other) }))
+    .filter((x) => x.v != null)
+    .sort((a, b) => b.v - a.v)
+    .map((x, i) => [x.r, i + 1]));
   const rows = document.getElementById("rows");
   rows.replaceChildren();
   if (!doc.rows.length) rows.append(el("p", "missing", "まだ数字が出ていません"));
@@ -81,7 +87,8 @@ function render() {
     const diff = v != null && base != null ? `（${v - base >= 0 ? "+" : ""}${(v - base).toFixed(1)}）` : "";
     const units = r.installed ? `${r.installed}台中${r.active}台稼働` : `${r.active}台稼働`;
     const ov = pick(r, other);
-    const otherText = ov == null ? "" : `${METRIC_LABEL[other]} ${ov.toFixed(1)}　`;
+    const otherText = ov == null ? ""
+      : `${METRIC_LABEL[other]} ${ov.toFixed(1)}（${otherRank.get(r)}位）　`;
     row.append(el("span", "sub",
       `${otherText}${usualText(u, metric)}${diff}　${units}${r.few ? "　まだ少ない" : ""}`));
     rows.append(row);
