@@ -11,6 +11,11 @@
   <h1>ペカジャグ速報</h1>
   <p id="when" class="when">読み込み中…</p>
   <div class="bar" id="slots"></div>
+  <div class="bar" id="metric">
+    <span>数字:</span>
+    <button data-metric="comb" class="on">合算</button>
+    <button data-metric="reg">REG</button>
+  </div>
   <div class="bar" id="compare">
     <span>比べる相手:</span>
     <button data-cmp="all" class="on">全日</button>
@@ -20,10 +25,10 @@
 <main id="rows"></main>
 <p id="missing" class="missing"></p>
 <footer>
-  <p>数字は店×機種の全台をまとめた「推定平均設定」です。その時刻までに座られた台だけで計算しています。</p>
-  <p>「普段」は閉店時の確定データの平均です。昼の数字と比べると、昼のほうが高めに出やすい可能性があります。</p>
+  <p>数字は店×機種の全台を合わせた合算確率（と REG 確率）を、メーカー公表値の設定1〜6の目盛りに置いた位置です（ペカジャグ観測所と同じ）。「5.3」なら設定5と6の間あたりの確率という意味で、平均設定そのものではありません。</p>
+  <p>その時刻までに回った分だけで計算するので、閉店後より上下にぶれやすくなります。「普段」は閉店時の確定データを足し上げて同じ目盛りに置いたものです。</p>
   <p><span class="few-sample">灰色</span>はデータがまだ少ない組です（稼働3台未満、または合計5,000G未満）。</p>
 </footer>
-<script src="app.js?v=1"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>
