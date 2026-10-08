@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ペカジャグ速報</title>
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=2">
 <!-- アイコンを変えたら ?v= も変える。同じ URL のままだと iPhone が古い絵を使い続ける（観測所 2026-09-27） -->
 <link rel="manifest" href="manifest.webmanifest?v=20261001">
 <link rel="icon" href="icons/favicon.ico?v=20261001">
@@ -29,13 +29,16 @@
     <button data-cmp="same">同じ区分</button>
   </div>
 </header>
+<section id="alerts"></section>
 <main id="rows"></main>
 <p id="missing" class="missing"></p>
 <footer>
   <p>数字は店×機種の全台を合わせた合算確率（と REG 確率）を、メーカー公表値の設定1〜6の目盛りに置いた位置です（ペカジャグ観測所と同じ）。「5.3」なら設定5と6の間あたりの確率という意味で、平均設定そのものではありません。</p>
   <p>その時刻までに回った分だけで計算するので、閉店後より上下にぶれやすくなります。「普段」は閉店時の確定データを足し上げて同じ目盛りに置いたものです。</p>
+  <p>グラフの ● は今回の位置、▼ は普段（「比べる相手」で選んだほう）の位置です。端の 1 と 6 の外は、端に寄せて紫で描きます。</p>
+  <p><b class="adv-sample">ペカジャグ出玉注意報</b>は合算と REG の両方が設定4以上、<b class="warn-sample">ペカジャグ出玉警報</b>は両方が設定5以上の組です（データが少ない組も含みます）。</p>
   <p><span class="few-sample">灰色</span>はデータがまだ少ない組です（稼働3台未満、または合計5,000G未満）。</p>
 </footer>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

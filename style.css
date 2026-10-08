@@ -1,8 +1,11 @@
 :root { --fg: #222; --bg: #fff; --muted: #888; --up: #c62828; --down: #1565c0;
-        --few-bg: #f0f0f0; --line: #e5e5e5; --on: #222; }
+        --few-bg: #f0f0f0; --line: #e5e5e5; --on: #222;
+        --dot: #d3452b; --cmp: #555; --out: #8a2be2; --axis: #999; --tick: #bbb;
+        --warn: #ff3b30; --adv: #ffd60a; --alert-bg: #1c1c1e; }
 @media (prefers-color-scheme: dark) {
   :root { --fg: #eee; --bg: #121212; --muted: #999; --up: #ef5350; --down: #64b5f6;
-          --few-bg: #2a2a2a; --line: #333; --on: #eee; }
+          --few-bg: #2a2a2a; --line: #333; --on: #eee;
+          --dot: #ff6b4a; --cmp: #ccc; --out: #c08aff; --axis: #777; --tick: #555; --alert-bg: #000; }
 }
 * { box-sizing: border-box; }
 body { margin: 0; padding: 0 16px 32px; font-family: system-ui, sans-serif;
@@ -24,3 +27,32 @@ button.on { background: var(--on); color: var(--bg); }
 .missing { color: var(--muted); font-size: 0.9rem; }
 .few-sample { background: var(--few-bg); padding: 0 4px; }
 footer { margin-top: 24px; font-size: 0.8rem; color: var(--muted); }
+
+/* 注意報・警報。黄色い文字が読めるよう、明るい画面でも暗い地に載せる */
+#alerts { margin: 4px 0 8px; }
+.alert { background: var(--alert-bg); border-radius: 10px; padding: 10px 14px; margin-bottom: 10px;
+         border: 3px solid; color: #fff; }
+.alert h2 { margin: 0; font-size: 1.35rem; }
+.alert .cond { margin: 2px 0 6px; font-size: 0.8rem; color: #bbb; }
+.alert ul { margin: 0; padding: 0; list-style: none; }
+.alert li { padding: 4px 0; border-top: 1px solid #333; display: flex; flex-wrap: wrap; gap: 0 10px; }
+.alert li b { color: #fff; }
+.alert.warning { border-color: var(--warn); } .alert.warning h2 { color: var(--warn); }
+.alert.advisory { border-color: var(--adv); } .alert.advisory h2 { color: var(--adv); }
+.alert li span { font-variant-numeric: tabular-nums; }
+.row.al-warning { box-shadow: inset 5px 0 0 var(--warn); padding-left: 10px; }
+.row.al-advisory { box-shadow: inset 5px 0 0 var(--adv); padding-left: 10px; }
+.warn-sample { color: var(--warn); } .adv-sample { color: #b8860b; }
+@media (prefers-color-scheme: dark) { .adv-sample { color: var(--adv); } }
+
+/* 目盛り（観測所と同じ見た目） */
+.gauges { grid-column: 1 / 4; }
+.gauge { display: grid; grid-template-columns: 34px 1fr 34px; align-items: center; gap: 6px; }
+.gauge .lbl { font-size: 0.75rem; color: var(--muted); }
+.gauge .val { font-size: 0.85rem; text-align: right; font-variant-numeric: tabular-nums; }
+.svgbox { display: block; }
+.scale { width: 100%; height: 30px; display: block; }
+.axis { stroke: var(--axis); stroke-width: 1; } .tick { stroke: var(--tick); stroke-width: 1; }
+.tl { font-size: 8px; fill: var(--axis); text-anchor: middle; }
+.dot { fill: var(--dot); stroke: var(--bg); stroke-width: 1.5; } .dot.out { fill: var(--out); }
+.cmp { fill: var(--cmp); } .none { font-size: 9px; fill: var(--axis); text-anchor: middle; }
