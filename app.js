@@ -73,6 +73,17 @@ function renderAlerts(rows) {
     box.append(sec);
   }
 }
+// 同じ回を出し直したときだけ JSON に update_reason がある（2026-10-09〜）
+function renderUpdate(doc) {
+  const box = document.getElementById("update");
+  box.replaceChildren();
+  if (!doc.update_reason) return;
+  const sec = el("div", "update");
+  sec.append(el("b", null, `🔄 ${Number(doc.slot.slice(0, 2))}時の速報を更新しました（${doc.time} 時点）`));
+  sec.append(el("p", null, `理由: ${doc.update_reason}`));
+  box.append(sec);
+}
+
 const state = { entries: [], date: null, file: null, cmp: "all", metric: "comb", doc: null };
 
 // 古い回の JSON には REG が無いので null になる
@@ -145,6 +156,7 @@ function render() {
     .filter((x) => x.v != null)
     .sort((a, b) => b.v - a.v)
     .map((x, i) => [x.r, i + 1]));
+  renderUpdate(doc);
   renderAlerts(doc.rows);
   const rows = document.getElementById("rows");
   rows.replaceChildren();
