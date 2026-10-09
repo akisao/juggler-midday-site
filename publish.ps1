@@ -12,7 +12,7 @@ $app = "C:\Users\Owner\juggler-analyzer-paste"
 if ($Slot) {
     $existing = Join-Path $site ("data\" + (Get-Date -Format "yyyy-MM-dd") + "\" + $Slot.Replace(":", "") + ".json")
     if ((Test-Path $existing) -and -not $Reason) {
-        Write-Host "この回はもう公開済みです。出し直すときは -Reason で理由を付けてください（例: -Reason 'マルハンの4機種が取得できなかったため'）"
+        Write-Host "この回はもう公開済みです。出し直すときは -Reason で理由を付けてください（例: -Reason 'マルハンのネオアイムジャグラーEXが取れたため'）"
         exit 1
     }
 }

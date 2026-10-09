@@ -187,8 +187,15 @@ function render() {
     row.append(el("span", "sub", `${units}${r.few ? "　まだ少ない" : ""}`));
     rows.append(row);
   });
-  document.getElementById("missing").textContent =
-    doc.missing.map((n) => `※ ${n}は今回取得できませんでした`).join("　");
+  // 店の中の一部の機種だけ取れなかったときも書く（2026-10-09〜。古い回の JSON には missing_machines が無い）
+  const byShop = new Map();
+  for (const m of doc.missing_machines || []) {
+    byShop.set(m.shop_name, [...(byShop.get(m.shop_name) || []), m.machine_label]);
+  }
+  document.getElementById("missing").textContent = [
+    ...doc.missing.map((n) => `※ ${n}は今回取得できませんでした`),
+    ...[...byShop].map(([shop, labels]) => `※ ${shop}の${labels.join("・")}は今回取得できませんでした`),
+  ].join("　");
 }
 
 // 連打で古い応答が後から届いても、新しい選択を上書きしないための連番
