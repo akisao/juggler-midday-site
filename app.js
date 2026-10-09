@@ -65,7 +65,8 @@ function renderAlerts(rows) {
     for (const r of hit) {
       const li = el("li");
       li.append(el("b", null, `${r.shop_name} ${r.machine_label}`));
-      li.append(el("span", null, `合算 ${r.value.toFixed(1)}　REG ${r.reg.toFixed(1)}${r.few ? "　※まだ少ない" : ""}`));
+      const games = gamesText(r);
+      li.append(el("span", null, `合算 ${r.value.toFixed(1)}　REG ${r.reg.toFixed(1)}${games ? `　${games}` : ""}${r.few ? "　※まだ少ない" : ""}`));
       ul.append(li);
     }
     sec.append(ul);
@@ -101,6 +102,9 @@ function el(tag, cls, text) {
   if (text !== undefined) e.textContent = text;
   return e;
 }
+
+// 古い回の JSON（〜2026-10-08）には games が無いので出さない
+const gamesText = (r) => r.games == null ? "" : `総回転 ${r.games.toLocaleString("ja-JP")}G`;
 
 function usualText(u, metric) {
   const base = pick(u, metric);
@@ -156,7 +160,9 @@ function render() {
     row.append(el("span", "value " + (arrow === "up" ? "up" : arrow === "down" ? "down" : ""),
       v == null ? `${METRIC_LABEL[metric]} -` : `${METRIC_LABEL[metric]} ${v.toFixed(1)} ${ARROW[arrow]}`));
     const diff = v != null && base != null ? `（${v - base >= 0 ? "+" : ""}${(v - base).toFixed(1)}）` : "";
-    const units = r.installed ? `${r.installed}台中${r.active}台稼働` : `${r.active}台稼働`;
+    const games = gamesText(r);
+    const units = (r.installed ? `${r.installed}台中${r.active}台稼働` : `${r.active}台稼働`)
+      + (games ? `・${games}` : "");
     const ov = pick(r, other);
     const otherText = ov == null ? ""
       : `${METRIC_LABEL[other]} ${ov.toFixed(1)}（${otherRank.get(r)}位）　`;
@@ -164,8 +170,9 @@ function render() {
     gauges.append(gaugeLine("合算", pick(r, "comb"), pick(u, "comb")));
     gauges.append(gaugeLine("REG", pick(r, "reg"), pick(u, "reg")));
     row.append(gauges);
-    row.append(el("span", "sub",
-      `${otherText}${usualText(u, metric)}${diff}　${units}${r.few ? "　まだ少ない" : ""}`));
+    row.append(el("span", "sub", `${otherText}${usualText(u, metric)}${diff}`));
+    // 台数と総回転は数字の当てになり具合の目安なので、途中で折り返さないよう別の段にまとめる
+    row.append(el("span", "sub", `${units}${r.few ? "　まだ少ない" : ""}`));
     rows.append(row);
   });
   document.getElementById("missing").textContent =
