@@ -12,6 +12,7 @@ body { margin: 0; padding: 0 16px 32px; font-family: system-ui, sans-serif;
        color: var(--fg); background: var(--bg); }
 h1 { font-size: 1.2rem; margin: 16px 0 4px; }
 .when { font-size: 1.4rem; font-weight: bold; margin: 4px 0 12px; }
+.links { margin: 0; font-size: 0.9rem; }
 .bar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
 button { border: 1px solid var(--line); background: none; color: var(--fg);
          padding: 6px 12px; border-radius: 16px; font-size: 0.95rem; }

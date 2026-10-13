@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- CSP は index.html と同じ内容にそろえる（2026-10-11 アキラさん）。ほかの <meta>・<link> より前に置く -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ペカジャグ 期待収支シミュレーター</title>
+<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="sim.css?v=2">
+<link rel="icon" href="icons/favicon.ico?v=20261001">
+<meta name="theme-color" content="#b22222">
+</head>
+<body>
+<header>
+  <h1>ペカジャグ 期待収支シミュレーター <span class="trial">試作</span></h1>
+  <p id="when" class="when">読み込み中…</p>
+  <div class="bar"><select id="entry" aria-label="速報の回"></select><a href="index.html">速報にもどる</a></div>
+</header>
+<section id="controls" class="controls" hidden>
+  <div class="bar"><span class="bar" id="styles"></span><button type="button" id="sound" class="sound"></button></div>
+  <label for="time" class="time-label">打つ時間 <b id="time-text"></b><span id="games-text" class="games"></span></label>
+  <input type="range" id="time" min="1" step="1">
+</section>
+<main id="rows"></main>
+<footer>
+  <p>速報の推定値（合算の目盛りの位置。画面と同じ小数第1位）を、下の割数の表で設定と設定の間を按分して機械割にしています。例えば 3.8 なら設定3と設定4の割数を 2:8 で混ぜます。1未満は設定1、6を超える値は設定6の割数で止めます。</p>
+  <p>期待収支 ＝ 打つ時間 × 1時間 750G × 3枚 ×（機械割 − 100%）。円は等価（1枚 20円）で直しています。非等価のお店は、かっこの中の差枚で見てください。</p>
+  <p>出しているのは 15時・17時の速報で、推定値が 3.5以上の機種だけです（12時の速報は、閉店後の答え合わせで外れやすかったため出しません）。</p>
+  <p><b>チェリー狙い</b>：通常時はチェリーを狙い、ボーナス成立後は1枚掛けでぶどうを抜き、先ペカ時はチェリーを抜く打ち方。<b>適当打ち</b>：通常時に何も狙わない打ち方（メーカー公表の機械割）。</p>
+  <p>チェリー狙いの割数はガリぞう氏の独自調査・推計値です。実機とは誤差が出ることがあります。</p>
+  <p id="notes"></p>
+  <p>期待収支は「平均するとこのくらい」という目安です。その日の実際の収支は、これより大きく上下します。店×機種の全台を合わせた数字なので、どの台に座るかで変わります。</p>
+</footer>
+<script src="sim.js?v=2"></script>
+</body>
+</html>

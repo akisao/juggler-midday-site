@@ -1,0 +1,22 @@
+/* 期待収支シミュレーター。色と基本の見た目は style.css をそのまま使う */
+.trial { font-size: 0.75rem; border: 1px solid var(--muted); color: var(--muted);
+         border-radius: 8px; padding: 0 6px; vertical-align: middle; }
+select { font-size: 0.95rem; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line);
+         background: var(--bg); color: var(--fg); max-width: 100%; }
+/* 打ち方と時間は全機種で共通。下へ送っても手元に残るよう上に貼り付ける */
+.controls { position: sticky; top: 0; z-index: 1; background: var(--bg); padding: 8px 0 10px;
+            border-bottom: 1px solid var(--line); }
+.controls .bar .bar { margin-bottom: 0; }
+.sound { margin-left: auto; color: var(--muted); }
+.time-label { display: block; font-size: 0.95rem; margin: 4px 0; }
+.time-label b { font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.games { color: var(--muted); font-size: 0.85rem; margin-left: 8px; }
+input[type="range"] { width: 100%; height: 32px; accent-color: var(--dot); }
+.sim { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 12px 4px;
+       border-bottom: 1px solid var(--line); }
+.sim .name { font-weight: bold; }
+.sim .yen { font-size: 1.5rem; font-weight: bold; text-align: right; font-variant-numeric: tabular-nums; }
+.sim .yen.plus { color: #2e7d32; } .sim .yen.minus { color: var(--up); }
+@media (prefers-color-scheme: dark) { .sim .yen.plus { color: #66bb6a; } }
+.sim .sub { grid-column: 1 / 3; font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.empty { color: var(--muted); padding: 16px 0; }
