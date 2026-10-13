@@ -3,26 +3,13 @@
 # -At は必須。省略して現在時刻を使うと 1207 のような回ができ、「12時」ボタンと重複するため
 # -Slot は回の名前（予定の時刻 12:00 / 15:00 / 17:00）。長引いて時をまたいでもボタンが「12時」「17時」のままになる
 # -Reason は同じ回を出し直すときの理由。サイトの一番上と Discord の最初の1通に出る（2026-10-09 アキラさん）
-# -NotifyAt は Discord に送る時刻（HH:mm）。12時・17時ちょうどに出すため（2026-10-14 アキラさん）。
-#   先に書き出し、その数分前に push してサイトを反映させ、時刻ちょうどに通知する。過ぎていればすぐ送る
-param([Parameter(Mandatory=$true)][string]$At, [string]$Slot, [string]$Reason, [switch]$Notify, [string]$NotifyAt)
+param([Parameter(Mandatory=$true)][string]$At, [string]$Slot, [string]$Reason, [switch]$Notify)
 $ErrorActionPreference = "Stop"
 $site = $PSScriptRoot
 $app = "C:\Users\Owner\juggler-analyzer-paste"
-# 反映は push から25〜50秒（10/13 の実測）。通知を開いた人が古いサイトを見ないよう余裕を見て先に push する
-$PushLeadMinutes = 3
-
-function Wait-Until([datetime]$when) {
-    $ms = ($when - (Get-Date)).TotalMilliseconds
-    if ($ms -gt 0) {
-        Write-Host ("{0:HH:mm:ss} まで待ちます" -f $when)
-        Start-Sleep -Milliseconds ([int]$ms)
-    }
-}
-
-if ($NotifyAt -and -not $Notify) { Write-Host "-NotifyAt は -Notify と一緒に使ってください"; exit 1 }
-$notifyTime = $null
-if ($NotifyAt) { $notifyTime = [datetime]::ParseExact($NotifyAt, "HH:mm", $null) }
+# Discord は push のあと反映を待ってから送る。先に送ると、通知を開いた人に反映前の古いサイトが見える（2026-10-14）
+# 反映は push から25〜50秒（10/13 の実測）
+$PagesDeploySeconds = 60
 
 # 出し直しなのに理由が無いと、見た人は前の速報と何が違うのか分からない。書き忘れをここで止める
 if ($Slot) {
@@ -37,9 +24,7 @@ if ($Slot) {
 $pyArgs = @("-m", "juggler.cli", "midday", "--at", $At, "--out", "$site\data")
 if ($Slot) { $pyArgs += @("--slot", $Slot) }
 if ($Reason) { $pyArgs += @("--reason", $Reason) }
-$writeArgs = $pyArgs
-if ($Notify -and -not $notifyTime) { $writeArgs += "--notify" }
-& "$app\.venv\Scripts\python.exe" @writeArgs
+& "$app\.venv\Scripts\python.exe" @pyArgs
 if ($LASTEXITCODE -ne 0) { Write-Host "行が無いか書き出しに失敗したので公開しません"; exit 1 }
 
 git -C $site add -A
@@ -47,13 +32,12 @@ $changed = git -C $site status --porcelain
 if (-not $changed) { Write-Host "変更なし"; exit 0 }
 git -C $site commit -q -m ("速報 " + (Get-Date -Format "yyyy-MM-dd HH:mm"))
 if ($LASTEXITCODE -ne 0) { Write-Host "コミットに失敗しました"; exit 1 }
-if ($notifyTime) { Wait-Until $notifyTime.AddMinutes(-$PushLeadMinutes) }
 git -C $site push
 if ($LASTEXITCODE -ne 0) { Write-Host "push に失敗しました（公開されていません）"; exit 1 }
 Write-Host "公開しました。数分で反映されます"
 
-if ($notifyTime) {
-    Wait-Until $notifyTime
+if ($Notify) {
+    Write-Host "サイトの反映を $PagesDeploySeconds 秒待ってから Discord に送ります"
+    Start-Sleep -Seconds $PagesDeploySeconds
     & "$app\.venv\Scripts\python.exe" @($pyArgs + "--notify-only")
-    Write-Host ("{0:HH:mm:ss} に Discord への送信を終えました" -f (Get-Date))
 }
