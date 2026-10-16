@@ -65,6 +65,7 @@ footer { margin-top: 24px; font-size: 0.8rem; color: var(--muted); }
 .simlink { display: flex; align-items: center; gap: 12px; margin: 8px 0 4px; padding: 12px 14px; border-radius: 12px;
            background: #2b2b2b; color: #fff; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
 .simlink:active { transform: translateY(1px); }
+.simlink[hidden] { display: none; }
 .simlink-ic { flex: none; width: 36px; height: 36px; border-radius: 50%; background: #e8b54a; color: #2b2b2b;
               font-weight: 700; font-size: 19px; line-height: 36px; text-align: center; }
 .simlink-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }

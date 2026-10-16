@@ -3,6 +3,8 @@ const ARROW = { up: "↑", flat: "→", down: "↓", none: "" };
 // Python 側の MIDDAY_ARROW_THRESHOLD と同じ。REG の矢印はここで決める（JSON には合算の矢印しか無い）
 const ARROW_THRESHOLD = 0.3;
 const METRIC_LABEL = { comb: "合算", reg: "REG" };
+// 期待収支シミュレーターの案内を出さない回
+const NO_SIM_SLOTS = new Set(["1200"]);
 // Python 側の ALERT_ADVISORY_MIN / ALERT_WARNING_MIN と同じ。alert を持たない古い回の JSON だけここで判定する
 const ALERT_ADVISORY_MIN = 4.0, ALERT_WARNING_MIN = 5.0;
 const ALERT_INFO = {
@@ -156,6 +158,8 @@ function render() {
     .filter((x) => x.v != null)
     .sort((a, b) => b.v - a.v)
     .map((x, i) => [x.r, i + 1]));
+  // 12時の回のシミュレーターには数字が入らないので、案内を出さない（2026-10-16 アキラさん）
+  document.querySelector(".simlink").hidden = NO_SIM_SLOTS.has(doc.slot);
   renderUpdate(doc);
   renderAlerts(doc.rows);
   const rows = document.getElementById("rows");
